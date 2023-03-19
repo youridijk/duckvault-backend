@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\UserListItems;
 
-use App\Http\Controllers\Controller;
 use App\Models\Inducks\Issue;
 use App\Models\UserListItems\UserListIssue;
 

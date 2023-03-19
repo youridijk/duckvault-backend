@@ -5,8 +5,9 @@ namespace App\Models\Inducks;
 use App\Models\UserList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Issue extends Model
+class Character extends Model
 {
     use HasFactory;
 
@@ -15,7 +16,7 @@ class Issue extends Model
      *
      * @var string
      */
-    protected $table = 'inducks.issue';
+    protected $table = 'inducks.character';
 
 
     /**
@@ -23,15 +24,10 @@ class Issue extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'issuecode';
+    protected $primaryKey = 'charactercode';
 
-//    public function userLists(): HasMany
-//    {
-//        return $this->hasMany(UserListIssue::class, 'issue_code', 'issuecode');
-//    }
-
-    public function lists()
+    public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(UserList::class, 'user_list_issues');
+        return $this->belongsToMany(UserList::class, 'user_list_characters');
     }
 }

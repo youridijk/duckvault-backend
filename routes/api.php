@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserListController;
+use App\Http\Controllers\UserListItems\UserListCharacterController;
 use App\Http\Controllers\UserListItems\UserListIssueController;
-use App\Http\Controllers\UserListItems\UserListItemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +30,7 @@ Route::group([
 
 Route::resource('lists', UserListController::class);
 Route::get('lists/{list}/all', function (string $id) {
-   return \App\Models\UserList::with('issues')->find($id);
+   return \App\Models\UserList::with(['issues', 'characters'])->find($id);
 });
 
 Route::group([
@@ -39,4 +39,7 @@ Route::group([
 ], function () {
     Route::post('{list}/issues/{user_list_item}', [UserListIssueController::class, 'add']);
     Route::delete('{list}/issues/{user_list_item}', [UserListIssueController::class, 'delete']);
+
+    Route::post('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'add']);
+    Route::delete('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'delete']);
 });
