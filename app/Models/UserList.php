@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Inducks\Issue;
+use App\Models\UserListItems\UserListIssue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class UserList extends Model
 {
@@ -37,9 +38,14 @@ class UserList extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function issues(): HasMany
+//    public function issues(): HasMany
+//    {
+//        return $this->hasMany(UserListIssue::class);
+//    }
+
+    public function issues(): BelongsToMany
     {
-        return $this->hasMany(UserListIssue::class);
+        return $this->belongsToMany(Issue::class, 'user_list_issues', 'user_list_id','issue_code');
     }
 
 //    public function publications()
@@ -52,7 +58,6 @@ class UserList extends Model
      *
      * @var array
      */
-//    protected $visible = ['quote', 'context', 'creator_id', 'sayer_id'];
 
     protected $fillable = ['name', 'description', 'user_id'];
 }
