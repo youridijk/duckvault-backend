@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Inducks\Character;
 use App\Models\Inducks\Issue;
+use App\Models\Inducks\Publication;
 use App\Models\UserListItems\UserListCharacter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,10 +50,16 @@ class UserList extends Model
         return $this->belongsToMany(Issue::class, 'user_list_issues', 'user_list_id','issue_code');
     }
 
+    public function publications(): BelongsToMany
+    {
+        return $this->belongsToMany(Publication::class, 'user_list_publications', 'user_list_id','publication_code');
+    }
+
     public function characters(): BelongsToMany
     {
         return $this->belongsToMany(Character::class, 'user_list_characters', 'user_list_id','character_code');
     }
+
 
 //    public function publications()
 //    {
