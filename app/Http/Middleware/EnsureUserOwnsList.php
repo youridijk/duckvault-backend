@@ -28,7 +28,7 @@ class EnsureUserOwnsList
 
         try {
             $userList = UserList::findOrFail($id);
-        } catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException) {
             throw new NotFoundHttpException('List with id ' . $id . ' not found');
         }
 
