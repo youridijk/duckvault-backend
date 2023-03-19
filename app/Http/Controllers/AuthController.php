@@ -73,7 +73,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->setStatusCode(204);
+        return response('', 204);
     }
 
     /**
