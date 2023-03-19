@@ -40,11 +40,6 @@ class UserList extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-//    public function issues(): HasMany
-//    {
-//        return $this->hasMany(UserListIssue::class);
-//    }
-
     public function issues(): BelongsToMany
     {
         return $this->belongsToMany(Issue::class, 'user_list_issues', 'user_list_id','issue_code');
@@ -55,22 +50,15 @@ class UserList extends Model
         return $this->belongsToMany(Publication::class, 'user_list_publications', 'user_list_id','publication_code');
     }
 
+    public function stories(): BelongsToMany
+    {
+        return $this->belongsToMany(Publication::class, 'user_list_stories', 'user_list_id','story_code');
+    }
+
     public function characters(): BelongsToMany
     {
         return $this->belongsToMany(Character::class, 'user_list_characters', 'user_list_id','character_code');
     }
-
-
-//    public function publications()
-//    {
-//        return $this->hasMany(UserListPublication::class);
-//    }
-
-    /**
-     * The attributes that should be visible in arrays.
-     *
-     * @var array
-     */
 
     protected $fillable = ['name', 'description', 'user_id'];
 }

@@ -53,6 +53,7 @@ class UserListController extends Controller
         $userList->update($request->input());
 
         return response('', 204);
+//        return response($userList, 200);
     }
 
     /**

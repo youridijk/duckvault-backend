@@ -5,6 +5,7 @@ use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListItems\UserListCharacterController;
 use App\Http\Controllers\UserListItems\UserListIssueController;
 use App\Http\Controllers\UserListItems\UserListPublicationController;
+use App\Http\Controllers\UserListItems\UserListStoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,9 @@ Route::group([
 
     Route::post('{list}/publications/{user_list_item}', [UserListPublicationController::class, 'add']);
     Route::delete('{list}/publications/{user_list_item}', [UserListPublicationController::class, 'delete']);
+
+    Route::post('{list}/stories/{user_list_item}', [UserListStoryController::class, 'add']);
+    Route::delete('{list}/stories/{user_list_item}', [UserListStoryController::class, 'delete']);
 
     Route::post('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'add']);
     Route::delete('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'delete']);
