@@ -10,6 +10,8 @@ class Issue extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     /**
      * The table associated with the model.
      *
@@ -25,13 +27,13 @@ class Issue extends Model
      */
     protected $primaryKey = 'issuecode';
 
-//    public function userLists(): HasMany
-//    {
-//        return $this->hasMany(UserListIssue::class, 'issue_code', 'issuecode');
-//    }
-
     public function lists()
     {
-        return $this->belongsToMany(UserList::class, 'user_list_issues');
+        return $this->belongsToMany(
+            UserList::class,
+            'user_list_issues',
+            'issue_code',
+            'user_list_id'
+        )->withTimestamps();
     }
 }

@@ -37,17 +37,26 @@ Route::get('lists/{list}/all', function (string $id) {
 
 Route::group([
     'prefix' => 'lists',
-    'where' => ['user_list_item' => '(.*)']
+    'where' => [
+        'issue_code' => '(.*)',
+        'publication_code' => '(.*)',
+        'story_code' => '(.*)',
+        'character_code' => '(.*)',
+    ]
 ], function () {
-    Route::post('{list}/issues/{user_list_item}', [UserListIssueController::class, 'add']);
-    Route::delete('{list}/issues/{user_list_item}', [UserListIssueController::class, 'delete']);
+    Route::get('{list}/issues', [UserListIssueController::class, 'getAll']);
+    Route::post('{list}/issues/{issue_code}', [UserListIssueController::class, 'add']);
+    Route::delete('{list}/issues/{issue_code}', [UserListIssueController::class, 'delete']);
 
-    Route::post('{list}/publications/{user_list_item}', [UserListPublicationController::class, 'add']);
-    Route::delete('{list}/publications/{user_list_item}', [UserListPublicationController::class, 'delete']);
+    Route::get('{list}/publications', [UserListPublicationController::class, 'getAll']);
+    Route::post('{list}/publications/{publication_code}', [UserListPublicationController::class, 'add']);
+    Route::delete('{list}/publications/{publication_code}', [UserListPublicationController::class, 'delete']);
 
-    Route::post('{list}/stories/{user_list_item}', [UserListStoryController::class, 'add']);
-    Route::delete('{list}/stories/{user_list_item}', [UserListStoryController::class, 'delete']);
+    Route::get('{list}/stories', [UserListStoryController::class, 'getAll']);
+    Route::post('{list}/stories/{story_code}', [UserListStoryController::class, 'add']);
+    Route::delete('{list}/stories/{story_code}', [UserListStoryController::class, 'delete']);
 
-    Route::post('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'add']);
-    Route::delete('{list}/characters/{user_list_item}', [UserListCharacterController::class, 'delete']);
+    Route::get('{list}/characters', [UserListCharacterController::class, 'getAll']);
+    Route::post('{list}/characters/{character_code}', [UserListCharacterController::class, 'add']);
+    Route::delete('{list}/characters/{character_code}', [UserListCharacterController::class, 'delete']);
 });

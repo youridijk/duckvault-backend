@@ -11,6 +11,8 @@ class Publication extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     /**
      * The table associated with the model.
      *
@@ -28,6 +30,11 @@ class Publication extends Model
 
     public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(UserList::class, 'user_list_publications');
+        return $this->belongsToMany(
+            UserList::class,
+            'user_list_publications',
+            'publication_code',
+            'user_list_id'
+        )->withTimestamps();
     }
 }

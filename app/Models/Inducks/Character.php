@@ -11,6 +11,8 @@ class Character extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     /**
      * The table associated with the model.
      *
@@ -26,8 +28,13 @@ class Character extends Model
      */
     protected $primaryKey = 'charactercode';
 
-    public function lists(): BelongsToMany
+    public function lists()
     {
-        return $this->belongsToMany(UserList::class, 'user_list_characters');
+        return $this->belongsToMany(
+            UserList::class,
+            'user_list_characters',
+            'character_code',
+            'user_list_id'
+        )->withTimestamps();
     }
 }

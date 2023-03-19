@@ -4,6 +4,8 @@ namespace App\Http\Controllers\UserListItems;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\EnsureUserOwnsList;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use ReflectionClass;
@@ -23,6 +25,12 @@ abstract class UserListItemController extends Controller
         $this->middleware('auth:api');
         $this->middleware(EnsureUserOwnsList::class);
         $this->shortClassName = (new ReflectionClass($this->itemModel))->getShortName();
+    }
+
+    public function getAll(int $listId) {
+        return $this->itemModel::whereHas('lists', function (Builder $query) use ($listId) {
+            return $query->where('user_list_id', $listId);
+        })->get();
     }
 
     public function add(int $listId, string $userListItemId)
