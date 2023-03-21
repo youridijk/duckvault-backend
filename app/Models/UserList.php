@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Models\Inducks\Character;
 use App\Models\Inducks\Issue;
 use App\Models\Inducks\Publication;
-use App\Models\UserListItems\UserListCharacter;
+use App\Models\Inducks\Story;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserList extends Model
@@ -52,7 +51,7 @@ class UserList extends Model
 
     public function stories(): BelongsToMany
     {
-        return $this->belongsToMany(Publication::class, 'user_list_stories', 'user_list_id','story_code');
+        return $this->belongsToMany(Story::class, 'user_list_stories', 'user_list_id','story_code');
     }
 
     public function characters(): BelongsToMany

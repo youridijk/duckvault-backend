@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\UserList;
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,7 +15,7 @@ class EnsureUserOwnsList
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -26,14 +25,14 @@ class EnsureUserOwnsList
             'id' => ['required', 'int']
         ]);
 
-        try {
-            $userList = UserList::findOrFail($id);
-        } catch (ModelNotFoundException) {
+        $userList = auth()->user()->lists()->find($id);
+
+        if (!$userList) {
             throw new NotFoundHttpException('List with id ' . $id . ' not found');
         }
 
         if ($userList->user_id !== Auth::id()) {
-            throw new AuthenticationException( 'You don\'t own with list');
+            throw new AuthenticationException('You don\'t own with list');
         }
 
         $request['user_list'] = $userList;

@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\UserListItems;
 
 use App\Models\Inducks\Issue;
-use App\Models\UserListItems\UserListIssue;
 
 class UserListIssueController extends UserListItemController
 {
-    public function __construct()
-    {
-        parent::__construct(
-            Issue::class,
-            UserListIssue::class,
-            'issue_code',
-        );
-    }
+    protected string $shortClassName = 'issue';
+
+    protected string $itemModel = Issue::class;
+
+    protected string $relationKey = 'issues';
+
+    protected string $itemModelKey = 'issue_code';
 }
