@@ -41,22 +41,42 @@ class UserList extends Model
 
     public function issues(): BelongsToMany
     {
-        return $this->belongsToMany(Issue::class, 'user_list_issues', 'user_list_id','issue_code');
+        return $this->belongsToMany(
+            Issue::class, '
+            user_list_issues',
+            'user_list_id',
+            'issue_code'
+        )->withTimestamps();
     }
 
     public function publications(): BelongsToMany
     {
-        return $this->belongsToMany(Publication::class, 'user_list_publications', 'user_list_id','publication_code');
+        return $this->belongsToMany(
+            Publication::class,
+            'user_list_publications',
+            'user_list_id',
+            'publication_code'
+        )->withTimestamps();
     }
 
     public function stories(): BelongsToMany
     {
-        return $this->belongsToMany(Story::class, 'user_list_stories', 'user_list_id','story_code');
+        return $this->belongsToMany(
+            Story::class,
+            'user_list_stories',
+            'user_list_id',
+            'story_code'
+        )->withTimestamps();
     }
 
     public function characters(): BelongsToMany
     {
-        return $this->belongsToMany(Character::class, 'user_list_characters', 'user_list_id','character_code');
+        return $this->belongsToMany(
+            Character::class,
+            'user_list_characters',
+            'user_list_id',
+            'character_code'
+        )->withTimestamps();
     }
 
     protected $fillable = ['name', 'description', 'user_id'];
