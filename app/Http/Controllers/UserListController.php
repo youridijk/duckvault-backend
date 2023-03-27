@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\EnsureUserOwnsList;
+use App\Http\Middleware\Ownership\EnsureUserOwnsList;
 use App\Http\Requests\UserListRequest;
 use App\Models\UserList;
 use Illuminate\Http\Request;
@@ -41,7 +41,7 @@ class UserListController extends Controller
      */
     public function show(Request $request)
     {
-        return $request->get('user_list');
+        return $request->get('list');
     }
 
     /**
@@ -49,7 +49,7 @@ class UserListController extends Controller
      */
     public function update(UserListRequest $request)
     {
-        $userList = $request->get('user_list');
+        $userList = $request->get('list');
         $userList->update($request->input());
 
         return response('', 204);
@@ -61,7 +61,7 @@ class UserListController extends Controller
      */
     public function destroy(Request $request)
     {
-        $userList = $request->get('user_list');
+        $userList = $request->get('list');
         $userList->delete();
 
         return response('', 204);

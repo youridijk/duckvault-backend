@@ -42,8 +42,8 @@ class UserList extends Model
     public function issues(): BelongsToMany
     {
         return $this->belongsToMany(
-            Issue::class, '
-            user_list_issues',
+            Issue::class,
+            'user_list_issues',
             'user_list_id',
             'issue_code'
         )->withTimestamps();

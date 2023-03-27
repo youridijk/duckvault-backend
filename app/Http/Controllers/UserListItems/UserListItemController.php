@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\UserListItems;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\EnsureUserOwnsList;
+use App\Http\Middleware\Ownership\EnsureUserOwnsList;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ abstract class UserListItemController extends Controller
     {
         try {
             $this->itemModel::findOrFail($userListItemId);
-            $userList = $request->get('user_list');
+            $userList = $request->get('list');
 
             $items = call_user_func(array($userList, $this->relationKey));
             $itemAlreadyAdded = $items->find($userListItemId);
@@ -70,7 +70,7 @@ abstract class UserListItemController extends Controller
 
     public function delete(Request $request, int $listId, string $userListItemId): Response
     {
-        $userList = $request->get('user_list');
+        $userList = $request->get('list');
         $items = call_user_func(array($userList, $this->relationKey));
         $numberOfDeletedRows = $items->detach($userListItemId);
 
