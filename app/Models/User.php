@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Diary\DiaryEntry;
+use App\Models\Inducks\Issue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -67,5 +70,10 @@ class User extends Authenticatable implements JWTSubject
     public function lists(): HasMany
     {
         return $this->hasMany(UserList::class);
+    }
+
+    public function diaryEntries(): HasMany
+    {
+        return $this->hasMany(DiaryEntry::class);
     }
 }

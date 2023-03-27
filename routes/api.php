@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DiaryEntryController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListItems\UserListCharacterController;
 use App\Http\Controllers\UserListItems\UserListIssueController;
@@ -32,7 +33,7 @@ Route::group([
 
 Route::resource('lists', UserListController::class);
 Route::get('lists/{list}/all', function (string $id) {
-   return \App\Models\UserList::with(['issues', 'characters', 'publications'])->find($id);
+   return \App\Models\UserList::with(['issues', 'characters', 'publications', 'stories'])->find($id);
 });
 
 Route::group([
@@ -60,3 +61,5 @@ Route::group([
     Route::post('{list}/characters/{character_code}', [UserListCharacterController::class, 'add']);
     Route::delete('{list}/characters/{character_code}', [UserListCharacterController::class, 'delete']);
 });
+
+Route::resource('diary_entries', DiaryEntryController::class);

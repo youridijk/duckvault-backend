@@ -33,7 +33,13 @@ class EnsureUserOwnsEntity
         $relationEntity = $relationEntities->find($id);
 
         if (!$relationEntity) {
-            throw new NotFoundHttpException($this->entityName . ' with id ' . $id . ' not found');
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s with id \'%s\' not found',
+                    $this->entityName,
+                    $id
+                )
+            );
         }
 
         $request[$this->routeParameter] = $relationEntity;
