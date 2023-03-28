@@ -15,7 +15,8 @@ return new class extends Migration {
 
             $table->foreign('issue_code')
                 ->references('issuecode')
-                ->on('inducks.issue');
+                ->on('inducks.issue')
+                ->cascadeOnDelete();
 
             $table->unsignedBigInteger('diary_entry_id');
             $table->char('diary_entry_related_entity_type', 1)
@@ -23,7 +24,8 @@ return new class extends Migration {
 
             $table->foreign(['diary_entry_id', 'diary_entry_related_entity_type'])
                 ->references(['id', 'related_entity_type'])
-                ->on('diary_entries');
+                ->on('diary_entries')
+                ->cascadeOnDelete();
 
             $table->primary(['issue_code', 'diary_entry_id']);
 

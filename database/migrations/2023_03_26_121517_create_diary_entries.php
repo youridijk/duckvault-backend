@@ -17,7 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->cascadeOnDelete();
 
 //            $table->unsignedBigInteger('review_id'); // review stuff will be added later
 
