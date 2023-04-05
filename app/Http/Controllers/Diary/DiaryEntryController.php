@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Diary;
 
+use App\Http\Controllers\Controller;
 use App\Http\Middleware\Ownership\EnsureUserOwnsDiaryEntry;
 use App\Http\Requests\DiaryEntryRequest;
 use App\Models\Diary\DiaryEntry;
@@ -11,8 +12,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DiaryEntryController extends Controller
@@ -85,9 +84,7 @@ class DiaryEntryController extends Controller
         $data = $this->data[$relatedEntityType];
         $id = $validated[$data['modelColumn']];
 
-        try {
-            $data['model']::findOrFail($id);
-        } catch (ModelNotFoundException) {
+        if (!$data['model']::find($id)) {
             throw new NotFoundHttpException(
                 sprintf(
                     '%s with id \'%s\' couldn\'t be found',
@@ -101,6 +98,46 @@ class DiaryEntryController extends Controller
         DB::table($data['table'])->insert([
             'diary_entry_id' => $diaryEntry->id,
             $data['modelColumn'] => $id
+        ]);
+
+        return $diaryEntry;
+    }
+
+
+
+    protected string $storeModel;
+    protected string $storeTable;
+    protected string $storeModelColumn;
+    protected string $storeRelatedEntityType;
+
+    public function store_v2(DiaryEntryRequest $request)
+    {
+        $validated = $request->validate(
+            [
+                ...$request->rules(),
+                $this->storeModelColumn => 'required',
+            ],
+        );
+
+        $validated['user_id'] = Auth::id();
+        $validated['related_entity_type'] = $this->storeRelatedEntityType;
+
+        $id = $validated[$this->storeModelColumn];
+
+        if (!$this->storeModel::find($id)) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    '%s with id \'%s\' couldn\'t be found',
+                    $this->storeModel,
+                    $id
+                )
+            );
+        }
+
+        $diaryEntry = DiaryEntry::create($validated);
+        DB::table($this->storeTable)->insert([
+            'diary_entry_id' => $diaryEntry->id,
+            $this->storeModelColumn => $id
         ]);
 
         return $diaryEntry;

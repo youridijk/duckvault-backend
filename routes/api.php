@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DiaryEntryController;
+use App\Http\Controllers\Diary\DiaryEntryController;
+use App\Http\Controllers\Diary\DiaryEntryIssueController;
+use App\Http\Controllers\Diary\DiaryEntryStoryVersionController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListItems\UserListCharacterController;
 use App\Http\Controllers\UserListItems\UserListIssueController;
@@ -31,9 +33,9 @@ Route::group([
     Route::post('user', [AuthController::class, 'user']);
 });
 
-Route::resource('lists', UserListController::class);
+Route::resource('lists', UserListController::class)->except(['edit', 'create']);
 Route::get('lists/{list}/all', function (string $id) {
-   return \App\Models\UserList::with(['issues', 'characters', 'publications', 'stories'])->find($id);
+    return \App\Models\UserList::with(['issues', 'characters', 'publications', 'stories'])->find($id);
 });
 
 Route::group([
@@ -62,4 +64,13 @@ Route::group([
     Route::delete('{list}/characters/{character_code}', [UserListCharacterController::class, 'delete']);
 });
 
-Route::resource('diary_entries', DiaryEntryController::class);
+Route::group([
+    'prefix' => 'diary_entries'
+], function () {
+    Route::post('story_versions', [DiaryEntryStoryVersionController::class, 'store_v2']);
+    Route::post('issues', [DiaryEntryIssueController::class, 'store_v2']);
+});
+
+Route::resource('diary_entries', DiaryEntryController::class)
+//    ->except('store')
+    ->except(['edit', 'create']);
