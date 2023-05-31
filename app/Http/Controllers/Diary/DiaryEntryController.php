@@ -8,7 +8,6 @@ use App\Http\Requests\DiaryEntryRequest;
 use App\Models\Diary\DiaryEntry;
 use App\Models\Inducks\Issue;
 use App\Models\Inducks\StoryVersion;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Diary\DiaryEntryController;
 use App\Http\Controllers\Diary\DiaryEntryIssueController;
 use App\Http\Controllers\Diary\DiaryEntryStoryVersionController;
+use App\Http\Controllers\OwnedIssuesController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListItems\UserListCharacterController;
 use App\Http\Controllers\UserListItems\UserListIssueController;
@@ -22,16 +24,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-], function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('user', [AuthController::class, 'user']);
-});
+Route::controller(AuthController::class)
+    ->prefix('auth')
+    ->middleware('api')
+    ->group(function () {
+        Route::post('register', 'register');
+        Route::post('login', 'login');
+        Route::post('logout', 'logout');
+        Route::post('refresh', 'refresh');
+        Route::post('user', 'user');
+    });
 
 Route::resource('lists', UserListController::class)->except(['edit', 'create']);
 Route::get('lists/{list}/all', function (string $id) {
@@ -74,3 +76,17 @@ Route::group([
 Route::resource('diary_entries', DiaryEntryController::class)
 //    ->except('store')
     ->except(['edit', 'create']);
+
+Route::controller(OwnedIssuesController::class)
+    ->prefix('user/owned_issues')
+    ->where([
+        'issue_code' => '(.*)',
+    ])
+    ->group(function () {
+        Route::get('', 'index');
+        Route::post('{issue_code}', 'store');
+        Route::delete('{issue_code}', 'destroy');
+    });
+
+Route::get('user/{user_id}/owned_issues', [OwnedIssuesController::class, 'show_of_user']);
+Route::get('user/{user_id}', [UserController::class, 'show_user']);
