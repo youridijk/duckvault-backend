@@ -7,11 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class AuthController extends Controller
+class JWTAuthController extends Controller
 {
 
     /**
-     * Create a new AuthController instance.
+     * Create a new JWTAuthController instance.
      *
      * @return void
      */

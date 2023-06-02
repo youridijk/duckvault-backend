@@ -12,7 +12,7 @@ class UserListController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware($this->authMiddleware);
         $this->middleware(EnsureUserOwnsList::class)->only(['show','update', 'destroy']);
     }
 

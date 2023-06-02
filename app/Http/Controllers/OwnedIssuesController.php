@@ -14,7 +14,7 @@ class OwnedIssuesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware($this->authMiddleware)->except('show_of_user');
     }
 
     /**

@@ -8,5 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    protected string $authMiddleware = 'auth:sanctum';
+
     use AuthorizesRequests, ValidatesRequests;
 }

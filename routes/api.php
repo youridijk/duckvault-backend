@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\Diary\DiaryEntryController;
 use App\Http\Controllers\Diary\DiaryEntryIssueController;
 use App\Http\Controllers\Diary\DiaryEntryStoryVersionController;
 use App\Http\Controllers\OwnedIssuesController;
+use App\Http\Controllers\SanctumAuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserListItems\UserListCharacterController;
@@ -24,15 +25,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(AuthController::class)
-    ->prefix('auth')
-    ->middleware('api')
+Route::controller(JWTAuthController::class)
+    ->prefix('auth/jwt')
     ->group(function () {
         Route::post('register', 'register');
         Route::post('login', 'login');
         Route::post('logout', 'logout');
         Route::post('refresh', 'refresh');
         Route::post('user', 'user');
+    });
+
+Route::controller(SanctumAuthController::class)
+    ->prefix('auth/sanctum')
+    ->group(function () {
+       Route::post('login', 'login');
+       Route::post('user', 'user');
+       Route::post('tokens', 'tokens');
     });
 
 Route::resource('lists', UserListController::class)->except(['edit', 'create']);

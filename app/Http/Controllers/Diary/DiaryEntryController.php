@@ -17,7 +17,7 @@ class DiaryEntryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware($this->authMiddleware);
         $this->middleware(EnsureUserOwnsDiaryEntry::class)
             ->only(['show', 'update', 'destroy']);
     }
