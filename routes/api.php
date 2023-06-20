@@ -41,6 +41,7 @@ Route::controller(SanctumAuthController::class)
        Route::post('login', 'login');
        Route::post('user', 'user');
        Route::post('tokens', 'tokens');
+       Route::post('logout', 'logout');
     });
 
 Route::resource('lists', UserListController::class)->except(['edit', 'create']);

@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class SanctumAuthController extends Controller
 {
@@ -26,9 +25,7 @@ class SanctumAuthController extends Controller
         $user = User::where('email', $validated['email'])->first();
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
         return [
