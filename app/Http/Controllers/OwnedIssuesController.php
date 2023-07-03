@@ -6,8 +6,11 @@ use App\Models\Inducks\Issue;
 use App\Models\OwnedIssue;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Database\Eloquent\Collection;
 
 class OwnedIssuesController extends Controller
 {
@@ -17,15 +20,38 @@ class OwnedIssuesController extends Controller
         $this->middleware($this->authMiddleware)->except('show_of_user');
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private function get_private_collection_of_user(int $userId, bool $compact)
     {
-        return $this->show_of_user(Auth::id());
+        if ($compact) {
+            /** @var Collection $ownedIssues */
+            $ownedIssues = OwnedIssue::where('user_id', '=', $userId)
+                ->select(['issue_code', 'created_at'])
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+
+            return response()->json([
+                'issues' => $ownedIssues,
+                'summary' => $ownedIssues->implode('issue_code', ','),
+            ]);
+        } else {
+            return OwnedIssue::with('issue:issuecode,title')
+                ->where('user_id', '=', $userId)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
     }
 
-    public function show_of_user(int $userId)
+    /**
+     * Display the private collection of current user
+     */
+    public function index(Request $request)
+    {
+        $compact = $request->query('compact') === '1';
+        return $this->get_private_collection_of_user(Auth::id(), $compact);
+    }
+
+    public function show_of_user(Request $request, int $userId)
     {
         $user = User::find($userId);
 
@@ -38,13 +64,12 @@ class OwnedIssuesController extends Controller
             );
         }
 
-        if ($user->private && $userId !== Auth::id()) {
-            throw new BadRequestHttpException('User has private account');
+        if ($user->private) {
+            throw new UnauthorizedException('User has private account');
         }
 
-        return OwnedIssue::with('issue:issuecode,title')
-            ->where('user_id', '=', $userId)
-            ->get();
+        $compact = $request->query('compact') === '1';
+        return $this->get_private_collection_of_user($userId, $compact);
     }
 
     /**

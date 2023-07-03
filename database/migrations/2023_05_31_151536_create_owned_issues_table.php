@@ -26,6 +26,8 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->primary(['issue_code', 'user_id']);
+            $table->index('user_id', 'fk_index_owned_issues_user_id');
+            $table->index('issue_code', 'fk_index_owned_issues_issue_code');
 
             $table->timestamps();
         });
