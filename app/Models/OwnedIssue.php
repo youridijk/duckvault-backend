@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Inducks\Issue;
+use App\Models\Inducks\IssueWithImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,11 @@ class OwnedIssue extends Model
     public function issue(): HasOne
     {
         return $this->hasOne(Issue::class, 'issuecode', 'issue_code');
+    }
+
+    public function issue_with_images(): HasOne
+    {
+        return $this->hasOne(IssueWithImages::class, 'issuecode', 'issue_code');
     }
 
     public static function find(string $issueCode, int $userId) {
