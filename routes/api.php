@@ -93,6 +93,8 @@ Route::controller(OwnedIssuesController::class)
     ])
     ->group(function () {
         Route::get('', 'index');
+        Route::get('/has/{issue_code}', 'owns_issue');
+        Route::get('{issue_code}', 'show');
         Route::post('{issue_code}', 'store');
         Route::delete('{issue_code}', 'destroy');
     });

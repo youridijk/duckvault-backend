@@ -8,7 +8,6 @@ use App\Models\Inducks\Issue;
 use App\Models\OwnedIssue;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,27 +21,6 @@ class OwnedIssuesController extends Controller
     )
     {
         $this->middleware($this->authMiddleware)->except('show_of_user');
-    }
-
-    private function get_private_collection_of_user(int $userId, bool $compact)
-    {
-        if ($compact) {
-            /** @var Collection $ownedIssues */
-            $ownedIssues = OwnedIssue::where('user_id', '=', $userId)
-                ->select(['issue_code', 'created_at'])
-                ->orderBy('created_at', 'desc')
-                ->limit(10)
-                ->get();
-
-            return response()->json([
-                'summary' => $ownedIssues->implode('issue_code', ','),
-            ]);
-        } else {
-            return OwnedIssue::with('issue_with_images')
-                ->where('user_id', '=', $userId)
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }
     }
 
     /**
@@ -99,6 +77,29 @@ class OwnedIssuesController extends Controller
         return $ownedIssues;
     }
 
+    public function owns_issue(string $issueCode)
+    {
+        return response()->json([
+            'owns_issue' => !!OwnedIssue::find($issueCode, Auth::id())
+        ]);
+    }
+
+    public function show(string $issueCode)
+    {
+        $ownedIssue = OwnedIssue::find($issueCode, Auth::id());
+
+        if (!$ownedIssue) {
+            throw new NotFoundHttpException(
+                sprintf(
+                    'Issue with issue code \'%s\' not found in owned issues',
+                    $issueCode,
+                )
+            );
+        }
+
+        return $ownedIssue;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -124,10 +125,12 @@ class OwnedIssuesController extends Controller
             );
         }
 
-        return OwnedIssue::create([
+        $ownedIssue = OwnedIssue::create([
             'issue_code' => $issueCode,
             'user_id' => Auth::id(),
         ]);
+
+        return response( $ownedIssue, 201);
     }
 
     /**
