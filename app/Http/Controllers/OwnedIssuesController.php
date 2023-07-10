@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Database\Eloquent\Collection;
 
 class OwnedIssuesController extends Controller
 {
@@ -21,6 +20,9 @@ class OwnedIssuesController extends Controller
     )
     {
         $this->middleware($this->authMiddleware)->except('show_of_user');
+        $this->middleware('cache.request')->only(['index', 'show_of_user']);
+        $this->middleware('cache.flush:owned_issues.index,owned_issues.show_of_user,owned_issues.has,owned_issues.show')
+            ->only(['store', 'destroy']);
     }
 
     /**
@@ -130,7 +132,7 @@ class OwnedIssuesController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return response( $ownedIssue, 201);
+        return response($ownedIssue, 201);
     }
 
     /**

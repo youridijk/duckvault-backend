@@ -1,6 +1,7 @@
 version: '3'
 services:
     laravel.test:
+        container_name: laravel
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
@@ -25,6 +26,7 @@ services:
         depends_on:
             - redis
     redis:
+        container_name: laravel-redis
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'

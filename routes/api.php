@@ -92,12 +92,12 @@ Route::controller(OwnedIssuesController::class)
         'issue_code' => '(.*)',
     ])
     ->group(function () {
-        Route::get('', 'index');
-        Route::get('/has/{issue_code}', 'owns_issue');
-        Route::get('{issue_code}', 'show');
-        Route::post('{issue_code}', 'store');
-        Route::delete('{issue_code}', 'destroy');
+        Route::get('', 'index')->name('owned_issues.index');
+        Route::get('/has/{issue_code}', 'owns_issue')->name('owned_issues.has');
+        Route::get('{issue_code}', 'show')->name('owned_issues.show');
+        Route::post('{issue_code}', 'store')->name('owned_issues.store');
+        Route::delete('{issue_code}', 'destroy')->name('owned_issues.destroy');
     });
 
-Route::get('user/{user_id}/owned_issues', [OwnedIssuesController::class, 'show_of_user']);
+Route::get('user/{user_id}/owned_issues', [OwnedIssuesController::class, 'show_of_user'])->name('owned_issues.user.index');
 Route::get('user/{user_id}', [UserController::class, 'show_user']);

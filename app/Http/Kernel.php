@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CacheRequest;
+use App\Http\Middleware\FlushCachedRequest;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,5 +65,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'cache.request' => CacheRequest::class,
+        'cache.flush' => FlushCachedRequest::class
     ];
 }
