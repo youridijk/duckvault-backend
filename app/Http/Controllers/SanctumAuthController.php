@@ -17,12 +17,12 @@ class SanctumAuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'device_name' => 'required',
+            'username' => ['required', 'between:4,255'],
+            'password' => ['required', 'between:4,255'],
+            'device_name' => ['required', 'between:4,255'],
         ]);
 
-        $user = User::where('email', $validated['email'])->first();
+        $user = User::where('username', $validated['username'])->first();
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);

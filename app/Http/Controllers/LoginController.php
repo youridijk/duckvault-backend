@@ -20,11 +20,11 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'username' => 'required',
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
 //        if (Auth::attempt($credentials, true)) {
 //            Auth::login(Auth::user(), true);
 //            return redirect()->intended('me');

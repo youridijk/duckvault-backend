@@ -23,8 +23,8 @@ class JWTAuthController extends Controller
     public function register(Request $request): Response
     {
         $credentials = $request->validate([
-            'username' => ['required', 'string', 'between:4,255'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'username' => ['required', 'string', 'between:4,255', 'unique:users,username',],
+//            'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'between:4,255']
         ]);
 
@@ -43,7 +43,8 @@ class JWTAuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+//            'email' => ['required', 'email'],
+            'username' => ['required', 'string', 'between:4,255'],
             'password' => ['required', 'string', 'between:4,255']
         ]);
 
